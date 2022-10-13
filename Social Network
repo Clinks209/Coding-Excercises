@@ -1,0 +1,88 @@
+function solve(input) {
+    let people = {}
+
+    while (input[0] != "Log out") {
+        let current = input.shift().split(":")
+        let command = current[0]
+        let name = current[1]
+        let p1 = current[2]
+        let person = people[name]
+
+        if (command === "New follower") {
+            if (!person) {
+                people[name] = {
+                    likes: 0,
+                    comments: 0
+                }
+            }
+
+        } else if (command === "Like") {
+            if (person) {
+                person.likes += Number(p1)
+
+            } else {
+                people[name] = {
+                    likes: Number(p1),
+                    comments: 0
+                }
+            }
+        } else if (command === "Comment") {
+            if (person) {
+                person.comments += 1
+            } else {
+                people[name] = {
+                    likes: 0,
+                    comments: 1
+                }
+            }
+
+        } else if (command === "Blocked") {
+            if (!person) {
+                console.log(`${name} doesn't exist.`)
+            } else {
+                delete people[name]
+            }
+        }
+    }
+    let followers = 0
+
+    for (let i of Object.entries(people)) {
+        followers++
+    }
+    console.log(`${followers} followers`)
+
+    for (let i of Object.entries(people)) {
+        let name = i[0]
+        let person = i[1]
+        let likes = person.likes
+        let comments = person.comments
+        let total = likes + comments
+
+        console.log(`${name.trim()}: ${total}`)
+    }
+}
+
+
+// solve((["New follower: George",
+//     "Like: George: 5",
+//     "New follower: George",
+//     "Log out"]))
+
+// console.log("-------")
+
+// solve((["Like: Katy: 3",
+//     "Comment: Katy",
+//     "New follower: Bob",
+//     "Blocked: Bob",
+//     "New follower: Amy",
+//     "Like: Amy: 4",
+//     "Log out"]))
+
+// console.log("-------")
+
+solve((["Blocked: Amy",
+    "Comment: Amy",
+    "New follower: Amy",
+    "Like: Tom: 5",
+    "Like: Ellie: 5",
+    "Log out"]))
